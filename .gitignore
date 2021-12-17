@@ -73,5 +73,5 @@ Plugins/*/Intermediate/*
 # Cache files for the editor to use
 DerivedDataCache/*
 
-#Content takes up alot of space
-Content/*
+#Content takes up alot of space/LtBelica
+ParagonLtBelica*/
