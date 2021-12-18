@@ -58,6 +58,22 @@ protected:
 	/*Set baseTurnRate and BaseLookUpRate based on aiming */
 	void SetLookRates();
 
+	void CalculateCrosshairSpread(float DeltaTime);
+
+
+	void StartCrosshairBulletFire();
+
+	UFUNCTION()
+	void FinishCrosshairBulletFire();
+
+	void FireButtonPressed();
+	void FireButtonReleased();
+
+	void StartFireTimer();
+
+	UFUNCTION()
+	void AutoFireReset();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -151,6 +167,44 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat", meta = (AllowPrivateAccess = "true"))
 	float ZoomInterpSpeed;
 
+	/*Determines the spread of the crosshair*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Crosshairs", meta = (AllowPrivateAccess = "true"))
+	float CrosshairSpreadMultiplier;
+
+	/*Velocity component for crosshair spread*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Crosshairs", meta = (AllowPrivateAccess = "true"))
+	float CrosshairVelocityFactor;
+
+	/*In air component for crosshair spread*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Crosshairs", meta = (AllowPrivateAccess = "true"))
+	float CrosshairInAirFactor;
+
+	/*Aim component for crosshair spread*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Crosshairs", meta = (AllowPrivateAccess = "true"))
+	float CrosshairAimFactor;
+
+	/*Shooting component for crosshair spread*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Crosshairs", meta = (AllowPrivateAccess = "true"))
+	float CrosshairShootingFactor;
+
+	float ShootTimeDuration;
+
+	bool bFiringBullet;
+
+	FTimerHandle CrosshairShootTimer;
+
+	/*LMB or RT pressed*/
+	bool bFireButtonPressed;
+
+	/*True when character can fire. False when waiting for the timer*/
+	bool bShouldFire;
+
+	/*Rate of automatic gunfire*/
+	float AutomaticFireRate;
+
+	/*Sets a timer between gunshots*/
+	FTimerHandle AutoFireTimer;
+
 public:
 	/*Returns CameraBoom subobject*/
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
@@ -159,4 +213,7 @@ public:
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	FORCEINLINE bool GetAiming() const { return bAiming; }
+
+	UFUNCTION(BlueprintCallable)
+	float GetCrosshairSpreadMultiplier() const;
 };
